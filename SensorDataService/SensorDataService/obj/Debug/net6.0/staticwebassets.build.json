@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "AhrZws12XzJ1EzZtKH+Ev4SD0GCQTCbOE5VIyhStg3k=",
+  "Source": "SensorDataService",
+  "BasePath": "_content/SensorDataService",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
