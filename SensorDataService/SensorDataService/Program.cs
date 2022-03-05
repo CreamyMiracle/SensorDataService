@@ -1,3 +1,4 @@
+using SensorDataService.Hubs;
 using SensorDataService.Model;
 using SensorDataService.Service;
 using SQLite;
@@ -19,6 +20,8 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton<DataService>(new DataService(con));
 builder.Services.AddSingleton<SQLiteAsyncConnection>(con);
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,6 +32,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
+
+app.MapHub<SensorsHub>("/sensorshub");
+
+app.MapHub<SensorDataHub>("/sensordatahub");
 
 app.MapControllers();
 

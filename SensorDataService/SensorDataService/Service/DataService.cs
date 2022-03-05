@@ -22,27 +22,28 @@ namespace SensorDataService.Service
             return await db_con.GetAllWithChildrenAsync<Sensor>();
         }
 
+        public async Task<Sensor> GetSensor(string sensorId)
+        {
+            return await db_con.GetAsync<Sensor>(sensorId);
+        }
+
+        public async Task<Sensor?> AddSensor(Sensor sensor)
+        {
+            return await db_con.InsertAsync(sensor) == 1 ? sensor : null;
+        }
+
         public async Task<Sensor?> PutSensor(Sensor sensor)
         {
             return await db_con.UpdateAsync(sensor) == 1 ? sensor : null;
         }
 
-        public async Task<IEnumerable<DataPoint>> GetSensorData(string sensorId, DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<DataPoint>> GetSensorDataPoints(string sensorId, DateTime fromDate, DateTime toDate)
         {
             return await db_con.GetAllWithChildrenAsync<DataPoint>(dp => dp.SensorId == sensorId && dp.Timestamp > fromDate && dp.Timestamp <= toDate);
         }
 
-        public async Task<DataPoint?> InsertSensorData(DataPoint datapoint)
+        public async Task<DataPoint?> InsertDataPoint(DataPoint datapoint)
         {
-            try
-            {
-                await db_con.GetAsync<Sensor>(datapoint.SensorId);
-            }
-            catch (Exception ex)
-            {
-                await db_con.InsertAsync(new Sensor() { Id = datapoint.SensorId });
-            }
-
             return await db_con.InsertAsync(datapoint) == 1 ? datapoint : null;
         }
 
