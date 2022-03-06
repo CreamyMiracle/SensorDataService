@@ -33,11 +33,12 @@ namespace SensorDataService.Controllers
         [HttpPost]
         public async Task<DataPoint?> Post(DataPoint datapoint)
         {
+            datapoint.Timestamp = DateTime.UtcNow;
             try
             {
                 await _dataService.GetSensor(datapoint.SensorId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Sensor newSensor = new Sensor() { Id = datapoint.SensorId };
                 if (await _dataService.AddSensor(new Sensor() { Id = datapoint.SensorId }) != null)
@@ -46,8 +47,8 @@ namespace SensorDataService.Controllers
                 }
             }
 
-            DataPoint dp = await _dataService.InsertDataPoint(datapoint);
-            if (dp != null)
+            DataPoint? dp = await _dataService.InsertDataPoint(datapoint);
+            if (dp != null && dp.SensorId != null)
             {
                 await _sensorDataHub.Clients.Group(dp.SensorId).SendAsync("ReceiveDataPoint", dp);
             }
